@@ -24,6 +24,10 @@ class Lexer():
         self.lexer.add('NUMBER', r'\d+')
         self.lexer.add('STRING', r"stI(\\.|[^stI\\])*stI")
 
+        # VARS
+        self.lexer.add('SET', r'SET')
+        self.lexer.add('VARIABLE', r'[^\s]+')
+
         # IGNORE SPACES
         self.lexer.ignore('\s+')
 

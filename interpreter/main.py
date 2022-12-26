@@ -12,6 +12,8 @@ def main():
     lexer = Lexer().build_lexer()
     tokens = lexer.lex(source_code)
 
+    #for token in tokens : print(token)
+
     #PARSER
     pg = Parser()
     pg.parse()

@@ -1,14 +1,16 @@
 from rply import ParserGenerator
-from abstree import Number, Sum, Sub, Print, Mul, Div, String
+from abstree import Number, Sum, Sub, Print, Mul, Div, String, StringVar
 
 
 class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV', 'STRING'],
+            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV', 'STRING', 'VARIABLE', 'SET'],
             precedence=[('left', ['PLUS', 'MINUS']), ('left', ['MUL', 'DIV'])]
         )
+
+        self.variables = {}
 
     def parse(self):
 
@@ -34,6 +36,10 @@ class Parser():
         @self.pg.production('statement : PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
         def statement(p):
             return Print(p[2])
+
+        @self.pg.production('statement : VARIABLE SET expression SEMI_COLON')
+        def statement(p):
+            self.variables[p[0].value] = p[2] 
 
 
         @self.pg.production('expression : expression SUM expression')
@@ -62,6 +68,11 @@ class Parser():
         @self.pg.production('expression : STRING')
         def number(p):
             return String(p[0].value[4:-4])
+
+
+        @self.pg.production('expression : VARIABLE')
+        def handle_var(p):
+            return self.variables[p[0].value]
 
 
         @self.pg.error

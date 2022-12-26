@@ -46,3 +46,14 @@ class Print():
 
     def eval(self):
         print(self.value.eval())
+
+
+class Variable():
+    def __init__(self, value, name):
+        self.value = value
+        self.name = name
+    
+
+class StringVar(Variable):
+    def eval(self):
+        return str(self.value)
