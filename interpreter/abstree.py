@@ -5,6 +5,14 @@ class Number():
     def eval(self):
         return int(self.value)
 
+
+class String():
+    def __init__(self, value):
+        self.value = value
+
+    def eval(self):
+        return str(self.value)
+
 #TEMPLATE
 class BinaryOperator():
     def __init__(self, left_var, right_var):

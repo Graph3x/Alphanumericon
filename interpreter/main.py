@@ -17,8 +17,8 @@ def main():
     pg.parse()
     parser = pg.build_parser()
 
-    parser.parse(tokens).eval()
-
+    for s in parser.parse(tokens):
+        s.eval()
 
 if __name__ == '__main__':
     main()

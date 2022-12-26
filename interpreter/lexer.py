@@ -6,22 +6,25 @@ class Lexer():
 
 
     def add_tokens(self):
-        # Print
+        # BUILD IN FUNCTIONS
         self.lexer.add('PRINT', r'PRINT')
-        # Parenthesis open and closed
-        self.lexer.add('OPEN_PAREN', r'sI')
-        self.lexer.add('CLOSE_PAREN', r'Is')
-        # Semicolon
+
+        # SEPERATORS
+        self.lexer.add('OPEN_PAREN', r'iI')
+        self.lexer.add('CLOSE_PAREN', r'Ii')
         self.lexer.add('SEMI_COLON', r'e')
-        # Plus, minus, multiplication and division
+
+        # MATH SYMBOLS
         self.lexer.add('SUM', r'plus')
         self.lexer.add('SUB', r'minus')
         self.lexer.add('MUL', r'times')
         self.lexer.add('DIV', r'divided')
 
-        # Numbers
+        # DATA TYPES
         self.lexer.add('NUMBER', r'\d+')
-        # Ignore spaces
+        self.lexer.add('STRING', r"stI(\\.|[^stI\\])*stI")
+
+        # IGNORE SPACES
         self.lexer.ignore('\s+')
 
 
