@@ -22,6 +22,16 @@ class Sub(BinaryOperator):
         return self.left_var.eval() - self.right_var.eval()
 
 
+class Mul(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() * self.right_var.eval()
+
+
+class Div(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() / self.right_var.eval()
+
+
 class Print():
     def __init__(self, value):
         self.value = value

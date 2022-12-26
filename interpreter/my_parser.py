@@ -1,13 +1,13 @@
 from rply import ParserGenerator
-from abstree import Number, Sum, Sub, Print
+from abstree import Number, Sum, Sub, Print, Mul, Div
 
 
 class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN',
-             'SEMI_COLON', 'SUM', 'SUB']
+            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV'],
+            precedence=[('left', ['PLUS', 'MINUS']), ('left', ['MUL', 'DIV'])]
         )
 
     def parse(self):
@@ -17,6 +17,8 @@ class Parser():
 
         @self.pg.production('expression : expression SUM expression')
         @self.pg.production('expression : expression SUB expression')
+        @self.pg.production('expression : expression MUL expression')
+        @self.pg.production('expression : expression DIV expression')
         def expression(p):
             left = p[0]
             right = p[2]
@@ -25,6 +27,10 @@ class Parser():
                 return Sum(left, right)
             elif operator.gettokentype() == 'SUB':
                 return Sub(left, right)
+            elif operator.gettokentype() == 'MUL':
+                return Mul(left, right)
+            elif operator.gettokentype() == 'DIV':
+                return Div(left, right)
 
         @self.pg.production('expression : NUMBER')
         def number(p):

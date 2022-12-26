@@ -11,11 +11,14 @@ class Lexer():
         # Parenthesis open and closed
         self.lexer.add('OPEN_PAREN', r'sI')
         self.lexer.add('CLOSE_PAREN', r'Is')
-        # Semi Colon
+        # Semicolon
         self.lexer.add('SEMI_COLON', r'e')
-        # Plus and minus
+        # Plus, minus, multiplication and division
         self.lexer.add('SUM', r'plus')
         self.lexer.add('SUB', r'minus')
+        self.lexer.add('MUL', r'times')
+        self.lexer.add('DIV', r'divided')
+
         # Numbers
         self.lexer.add('NUMBER', r'\d+')
         # Ignore spaces
