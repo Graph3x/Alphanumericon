@@ -13,6 +13,14 @@ class String():
     def eval(self):
         return str(self.value)
 
+
+class Boolean():
+    def __init__(self, value):
+        self.value = value
+
+    def eval(self):
+        return bool(self.value)
+
 #TEMPLATE
 class BinaryOperator():
     def __init__(self, left_var, right_var):
@@ -38,6 +46,31 @@ class Mul(BinaryOperator):
 class Div(BinaryOperator):
     def eval(self):
         return self.left_var.eval() / self.right_var.eval()
+
+
+class Equals(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() == self.right_var.eval()
+
+
+class Bigger(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() > self.right_var.eval()
+
+
+class Smaller(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() < self.right_var.eval()
+
+
+class BiggerEqual(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() >= self.right_var.eval()
+
+
+class SmallerEqual(BinaryOperator):
+    def eval(self):
+        return self.left_var.eval() <= self.right_var.eval()
 
 
 class Print():

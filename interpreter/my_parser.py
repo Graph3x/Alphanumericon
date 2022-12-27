@@ -1,12 +1,12 @@
 from rply import ParserGenerator
-from abstree import Number, Sum, Sub, Print, Mul, Div, String, StringVar
+from abstree import *
 
 
 class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV', 'STRING', 'VARIABLE', 'SET'],
+            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV', 'STRING', 'VARIABLE', 'SET', 'TRUE', 'FALSE', 'EQL', 'SML', 'BIG', 'SMLQ', 'BIGQ', 'IF'],
             precedence=[('left', ['PLUS', 'MINUS']), ('left', ['MUL', 'DIV'])]
         )
 
@@ -32,6 +32,13 @@ class Parser():
                 return []
             return [p[0]]
 
+        @self.pg.production('statement : IF expression SEMI_COLON OPEN_PAREN statement CLOSE_PAREN SEMI_COLON')
+        def statement(p):
+            exp = p[1]
+            if exp.eval() == True:
+                return p[4].eval()
+            else:
+                return None
 
         @self.pg.production('statement : PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
         def statement(p):
@@ -39,8 +46,7 @@ class Parser():
 
         @self.pg.production('statement : VARIABLE SET expression SEMI_COLON')
         def statement(p):
-            self.variables[p[0].value] = p[2] 
-
+            self.variables[p[0].value] = p[2]
 
         @self.pg.production('expression : expression SUM expression')
         @self.pg.production('expression : expression SUB expression')
@@ -59,6 +65,26 @@ class Parser():
             elif operator.gettokentype() == 'DIV':
                 return Div(left, right)
 
+        @self.pg.production('expression : expression EQL expression')
+        @self.pg.production('expression : expression BIG expression')
+        @self.pg.production('expression : expression SML expression')
+        @self.pg.production('expression : expression BIGQ expression')
+        @self.pg.production('expression : expression SMLQ expression')
+        def expression(p):
+            left = p[0]
+            right = p[2]
+            operator = p[1]
+            if operator.gettokentype() == 'EQL':
+                return Equals(left, right)
+            if operator.gettokentype() == 'BIG':
+                return Bigger(left, right)
+            if operator.gettokentype() == 'SML':
+                return Smaller(left, right)
+            if operator.gettokentype() == 'BIGQ':
+                return BiggerEqual(left, right)
+            if operator.gettokentype() == 'SMLQ':
+                return SmallerEqual(left, right)
+
 
         @self.pg.production('expression : NUMBER')
         def number(p):
@@ -69,6 +95,13 @@ class Parser():
         def number(p):
             return String(p[0].value[4:-4])
 
+        @self.pg.production('expression : TRUE')
+        def number(p):
+            return Boolean(p[0].value)
+
+        @self.pg.production('expression : FALSE')
+        def number(p):
+            return Boolean(p[0].value)
 
         @self.pg.production('expression : VARIABLE')
         def handle_var(p):

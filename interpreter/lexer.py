@@ -12,7 +12,6 @@ class Lexer():
         # SEPERATORS
         self.lexer.add('OPEN_PAREN', r'iI')
         self.lexer.add('CLOSE_PAREN', r'Ii')
-        self.lexer.add('SEMI_COLON', r'e')
 
         # MATH SYMBOLS
         self.lexer.add('SUM', r'plus')
@@ -20,9 +19,24 @@ class Lexer():
         self.lexer.add('MUL', r'times')
         self.lexer.add('DIV', r'divided')
 
+        self.lexer.add('EQL', r'equals')
+        self.lexer.add('SMLQ', r'smallerq')
+        self.lexer.add('BIGQ', r'biggerq')
+        self.lexer.add('SML', r'smaller')
+        self.lexer.add('BIG', r'bigger')
+        
+
         # DATA TYPES
         self.lexer.add('NUMBER', r'\d+')
-        self.lexer.add('STRING', r"stI(\\.|[^stI\\])*stI")
+        self.lexer.add('STRING', r"stI(?:(?!stI).)*stI")
+        self.lexer.add('TRUE', r"TRUE")
+        self.lexer.add('FALSE', r"FALSE")
+
+        #LOGIC AND LOOPS
+        self.lexer.add('IF', 'IF')
+
+        #USE SEMICOLONS
+        self.lexer.add('SEMI_COLON', r'e')
 
         # VARS
         self.lexer.add('SET', r'SET')
