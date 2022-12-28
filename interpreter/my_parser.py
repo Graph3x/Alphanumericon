@@ -6,8 +6,15 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV', 'STRING', 'VARIABLE', 'SET', 'TRUE', 'FALSE', 'EQL', 'SML', 'BIG', 'SMLQ', 'BIGQ', 'IF'],
-            precedence=[('left', ['PLUS', 'MINUS']), ('left', ['MUL', 'DIV'])]
+            ['NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN','SEMI_COLON', 'SUM', 'SUB', 'MUL', 'DIV', 'STRING', 'VARIABLE', 'SET', 'TRUE', 'FALSE', 'EQL', 'SML', 'BIG', 'SMLQ', 'BIGQ', 'IF', 'INPUT'],
+            precedence=[
+                ('left', ['VARIABLE',]),
+                ('left', ['SET',]),
+                ('left', ['IF', 'SEMI_COLON']),
+                ('left', ['EQL', 'SML', 'BIG', 'SMLQ', 'BIGQ']),
+                ('left', ['PLUS', 'MINUS']),
+                ('left', ['MUL', 'DIV'])
+            ]
         )
 
         self.variables = {}
@@ -32,14 +39,6 @@ class Parser():
                 return []
             return [p[0]]
 
-        @self.pg.production('statement : IF expression SEMI_COLON OPEN_PAREN statement CLOSE_PAREN SEMI_COLON')
-        def statement(p):
-            exp = p[1]
-            if exp.eval() == True:
-                return p[4].eval()
-            else:
-                return None
-
         @self.pg.production('statement : PRINT OPEN_PAREN expression CLOSE_PAREN SEMI_COLON')
         def statement(p):
             return Print(p[2])
@@ -47,6 +46,14 @@ class Parser():
         @self.pg.production('statement : VARIABLE SET expression SEMI_COLON')
         def statement(p):
             self.variables[p[0].value] = p[2]
+
+        @self.pg.production('statement : IF expression SEMI_COLON OPEN_PAREN statement CLOSE_PAREN SEMI_COLON')
+        def statement(p):
+            exp = p[1]
+            if exp.eval() == True:
+                return p[4]
+            else:
+                return None
 
         @self.pg.production('expression : expression SUM expression')
         @self.pg.production('expression : expression SUB expression')
@@ -106,6 +113,11 @@ class Parser():
         @self.pg.production('expression : VARIABLE')
         def handle_var(p):
             return self.variables[p[0].value]
+
+
+        @self.pg.production('expression : INPUT')
+        def handle_var(p):
+            return Input()
 
 
         @self.pg.error

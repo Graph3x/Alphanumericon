@@ -8,6 +8,7 @@ class Lexer():
     def add_tokens(self):
         # BUILD IN FUNCTIONS
         self.lexer.add('PRINT', r'PRINT')
+        self.lexer.add('INPUT', r'INPUT')
 
         # SEPERATORS
         self.lexer.add('OPEN_PAREN', r'iI')

@@ -81,6 +81,15 @@ class Print():
         print(self.value.eval())
 
 
+class Input():
+    def __init__(self):
+        self.value = None
+
+    def eval(self):
+        self.value = input()
+        return self.value
+
+
 class Variable():
     def __init__(self, value, name):
         self.value = value
